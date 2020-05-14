@@ -1,0 +1,44 @@
+
+DATASET:
+    NAME: wisdom_sim
+    DATA_ROOT: /data/6d-pose-estimation/wisdom/wisdom-real/high-res  # Override
+    TRAIN_INDICES: train_indices.npy
+    VAL_INDICES: test_indices.npy
+    IMAGE_PATH: depth_ims
+    MASK_PATH: modal_segmasks
+    # Number of classification classes (including background)
+    NUM_CLASSES: 2  # Override in sub-classes
+
+    # Input image resing
+    # Images are resized such that the smallest side is : IMAGE_MIN_DIM and
+    # the longest side is : IMAGE_MAX_DIM. In case both conditions can't
+    # be satisfied together the IMAGE_MAX_DIM is enforced.
+    IMAGE:
+        RESIZE_MODE: pad64
+        MIN_DIM: 512
+        MAX_DIM: 512
+        MIN_SCALE: ~
+        CHANNEL_COUNT: 3
+        # Image mean (RGB)
+        MEAN_PIXEL: [128, 128, 128]  # [125, 125, 125], set at runtime
+        # The image size, both dimension should be divided by 64
+        # The orig size of Tless is 540x720
+        SHAPE: [512, 512, 3]
+
+        # normalize the pixel value from the original value to 0-1.0
+        NORM_VALUE: 255
+
+RPN:
+    NMS_THRESHOLD: 0.7
+    ANCHOR:
+#        SCALES: [10, 20, 40, 60, 80]
+        SCALES: [32, 64, 128, 256, 512]
+        RATIOS: [0.5, 1, 2]
+
+        
+PROPOSALS:
+    POST_NMS_ROIS:
+        INFERENCE: 2000
+        TRAINING: 2000
+    TRAIN_ROIS_PER_IMAGE : 128
+    MAX_GT_INSTANCES: 100
